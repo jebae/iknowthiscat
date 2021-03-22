@@ -1,22 +1,28 @@
-console.log("app is running!");
+import Component from "./lib/Component.js";
+import SearchResult from "./component/SearchResults.js";
+import { fetchRandomCats } from "./api.js";
 
-class App {
-  $target = null;
-  data = [];
+export default class App extends Component {
+  $container = null;
+  state = {
+    loading: false,
+    error: false,
+    cats: [],
+  };
 
-  constructor($target) {
-    this.$target = $target;
+  constructor({ $container }) {
+    super();
+    this.$container = $container;
 
-    this.searchInput = new SearchInput({
-      $target,
-      onSearch: keyword => {
-        api.fetchCats(keyword).then(({ data }) => this.setState(data));
-      }
-    });
+    // this.searchInput = new SearchInput({
+    //   $container,
+    //   onSearch: keyword => {
+    //     api.fetchCats(keyword).then(({ data }) => this.setState(data));
+    //   }
+    // });
 
     this.searchResult = new SearchResult({
-      $target,
-      initialData: this.data,
+      $container,
       onClick: image => {
         this.imageInfo.setState({
           visible: true,
@@ -25,18 +31,32 @@ class App {
       }
     });
 
-    this.imageInfo = new ImageInfo({
-      $target,
-      data: {
-        visible: false,
-        image: null
-      }
-	});
+    // this.imageInfo = new ImageInfo({
+    //   $container,
+    //   data: {
+    //     visible: false,
+    //     image: null
+    //   }
+	  // });
+
+    this.initialFetch();
   }
 
-  setState(nextData) {
-    console.log(this);
-    this.data = nextData;
-    this.searchResult.setState(nextData);
+  async initialFetch() {
+    try {
+      const cats = await fetchRandomCats();
+
+      this.searchResult.setState({ ...this.state, cats });
+    } catch (err) {
+      console.error("something went wrong", err);
+    }
+  }
+
+  setState(nextState) {
+    super.setState(nextState);
+
+    const { loading, error, cats } = nextState;
+
+    this.searchResult.setState({ loading, error, cats });
   }
 }
