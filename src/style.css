@@ -102,11 +102,9 @@ width: 100%;
 	}
 }
 
-/* dark mode 처리
-@media (prefers-color-scheme: dark) {
-body {
+/* dark mode 처리 */
+body.darkmode {
 	background-color: #000;
 	color: white;
 }
-}
-*?
+

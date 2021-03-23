@@ -1,6 +1,8 @@
 import Component from "./lib/Component.js";
 import SearchResult from "./component/SearchResults.js";
+import DarkmodeCheckbox from "./component/DarkmodeCheckbox.js";
 import { fetchRandomCats } from "./api.js";
+import { isWindowDarkmode, addColorSchemeListener } from "./utils/darkmode.js";
 
 export default class App extends Component {
   $container = null;
@@ -8,6 +10,7 @@ export default class App extends Component {
     loading: false,
     error: false,
     cats: [],
+    isDarkmode: false,
   };
 
   constructor({ $container }) {
@@ -21,6 +24,11 @@ export default class App extends Component {
     //   }
     // });
 
+    this.darkmodeCheckbox = new DarkmodeCheckbox({
+      $container,
+      setDarkmode: this.setDarkmode.bind(this),
+    });
+
     this.searchResult = new SearchResult({
       $container,
       onClick: image => {
@@ -31,6 +39,7 @@ export default class App extends Component {
       }
     });
 
+
     // this.imageInfo = new ImageInfo({
     //   $container,
     //   data: {
@@ -40,23 +49,41 @@ export default class App extends Component {
 	  // });
 
     this.initialFetch();
+    this.initDarkmode();
   }
 
   async initialFetch() {
     try {
       const cats = await fetchRandomCats();
 
-      this.searchResult.setState({ ...this.state, cats });
+      this.setState({ ...this.state, cats });
     } catch (err) {
       console.error("something went wrong", err);
     }
   }
 
+  initDarkmode() {
+    addColorSchemeListener(this.setDarkmode.bind(this));
+
+    if (isWindowDarkmode())
+      this.setDarkmode(true);
+  }
+
+  setDarkmode(isDark) {
+    if (isDark) {
+      document.querySelector("body").classList.add("darkmode");
+    } else {
+      document.querySelector("body").classList.remove("darkmode");
+    }
+    this.setState({ ...this.state, isDarkmode: isDark });
+  }
+
   setState(nextState) {
     super.setState(nextState);
 
-    const { loading, error, cats } = nextState;
+    const { loading, error, cats, isDarkmode } = nextState;
 
     this.searchResult.setState({ loading, error, cats });
+    this.darkmodeCheckbox.setState({ isDarkmode });
   }
 }

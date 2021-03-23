@@ -1,3 +1,4 @@
+import { test } from "@jest/globals";
 import { isStateChanged } from "./Component";
 
 describe("isStateChanged", () => {
@@ -97,6 +98,30 @@ describe("isStateChanged", () => {
 			name: "woody",
 			material: "fabric",
 			friends: [ "buzz", "andy", "slinky", "bo" ],
+		};
+
+		expect(isStateChanged(a, b)).toEqual(true);
+	});
+
+	test("object same with function", () => {
+		const f = () => {};
+
+		const a = {
+			f,
+		};
+		const b = {
+			f,
+		};
+
+		expect(isStateChanged(a, b)).toEqual(false);
+	});
+
+	test("object different with function", () => {
+		const a = {
+			f: () => {},
+		};
+		const b = {
+			f: () => {},
 		};
 
 		expect(isStateChanged(a, b)).toEqual(true);
