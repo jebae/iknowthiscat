@@ -1,6 +1,5 @@
 import Component from "./lib/Component.js";
-import SearchResult from "./component/SearchResults.js";
-import DarkmodeCheckbox from "./component/DarkmodeCheckbox.js";
+import { DetailModal, SearchResult, DarkmodeCheckbox } from "./component/index.js";
 import { fetchRandomCats } from "./api.js";
 import { isWindowDarkmode, addColorSchemeListener } from "./utils/darkmode.js";
 
@@ -31,22 +30,18 @@ export default class App extends Component {
 
     this.searchResult = new SearchResult({
       $container,
-      onClick: image => {
-        this.imageInfo.setState({
+      onClick: (cat) => {
+        this.detailModal.setState({
           visible: true,
-          image
+          ...cat,
         });
       }
     });
 
 
-    // this.imageInfo = new ImageInfo({
-    //   $container,
-    //   data: {
-    //     visible: false,
-    //     image: null
-    //   }
-	  // });
+    this.detailModal = new DetailModal({
+      $container,
+	  });
 
     this.initialFetch();
     this.initDarkmode();

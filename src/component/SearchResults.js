@@ -18,23 +18,23 @@ export default class SearchResult extends Component {
 
 		$container.appendChild(this.$searchResult);
 		this.render();
+
+		this.$searchResult.addEventListener("click", e => {
+			if (e.target.classList.contains("item-Image")) {
+				const idx = parseInt(e.target.getAttribute("data-idx"));
+
+				this.onClick({ ...this.state.cats[idx] });
+			}
+		});
 	}
 
 	render() {
 		this.$searchResult.innerHTML = this.state.cats
-			.map(
-				cat => `
+			.map(({ url, name }, i) => `
 				<div class="item">
-				<img src=${cat.url} alt=${cat.name} />
+					<img class="item-Image" src=${url} alt=${name} data-idx=${i} />
 				</div>
-				`
-			)
+			`)
 			.join("");
-
-		this.$searchResult.querySelectorAll(".item").forEach(($item, index) => {
-			$item.addEventListener("click", () => {
-				this.onClick(this.data[index]);
-			});
-		});
 	}
 }
