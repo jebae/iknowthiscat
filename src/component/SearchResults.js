@@ -6,6 +6,7 @@ export default class SearchResult extends Component {
 		loading: false,
 		error: false,
 		cats: [],
+		keyword: "",
 	};
 	onClick = null;
 
@@ -29,12 +30,28 @@ export default class SearchResult extends Component {
 	}
 
 	render() {
-		this.$searchResult.innerHTML = this.state.cats
+		const { error, keyword, cats, loading } = this.state;
+
+		if (error) {
+			this.$searchResult.innerHTML = "something went wrong...";
+		} else if (loading) {
+			this.$searchResult.innerHTML = "Hold on...";
+		} else if (keyword != "" && cats.length === 0) {
+			this.$searchResult.innerHTML = "no results..."
+		} else {
+			this.$searchResult.innerHTML = cats
 			.map(({ url, name }, i) => `
 				<div class="item">
-					<img class="item-Image" src=${url} alt=${name} data-idx=${i} />
+					<img
+						class="item-Image"
+						loading="lazy"
+						src=${url}
+						alt=${name}
+						data-idx=${i}
+					/>
 				</div>
 			`)
 			.join("");
+		}
 	}
 }

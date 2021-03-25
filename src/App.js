@@ -1,6 +1,5 @@
 import Component from "./lib/Component.js";
-import { DetailModal, SearchResult, DarkmodeCheckbox } from "./component/index.js";
-import { fetchRandomCats } from "./api.js";
+import { DetailModal, SearchResult, DarkmodeCheckbox, SearchSection } from "./component/index.js";
 import { isWindowDarkmode, addColorSchemeListener } from "./utils/darkmode.js";
 
 export default class App extends Component {
@@ -9,33 +8,28 @@ export default class App extends Component {
     loading: false,
     error: false,
     cats: [],
+    keyword: "",
     isDarkmode: false,
+    searchRecords: [],
   };
 
   constructor({ $container }) {
     super();
     this.$container = $container;
 
-    // this.searchInput = new SearchInput({
-    //   $container,
-    //   onSearch: keyword => {
-    //     api.fetchCats(keyword).then(({ data }) => this.setState(data));
-    //   }
-    // });
-
     this.darkmodeCheckbox = new DarkmodeCheckbox({
       $container,
       setDarkmode: this.setDarkmode.bind(this),
     });
 
+    this.searchSection = new SearchSection({
+      $container,
+      onUpdateResult: this.onUpdateResult.bind(this),
+    });
+
     this.searchResult = new SearchResult({
       $container,
-      onClick: (cat) => {
-        this.detailModal.setState({
-          visible: true,
-          ...cat,
-        });
-      }
+      onClick: this.openDetailModal.bind(this),
     });
 
 
@@ -43,18 +37,7 @@ export default class App extends Component {
       $container,
 	  });
 
-    this.initialFetch();
     this.initDarkmode();
-  }
-
-  async initialFetch() {
-    try {
-      const cats = await fetchRandomCats();
-
-      this.setState({ ...this.state, cats });
-    } catch (err) {
-      console.error("something went wrong", err);
-    }
   }
 
   initDarkmode() {
@@ -73,12 +56,31 @@ export default class App extends Component {
     this.setState({ ...this.state, isDarkmode: isDark });
   }
 
+  openDetailModal(cat) {
+    this.detailModal.setState({
+      visible: true,
+      ...cat,
+    });
+  }
+
+  onUpdateResult(state) {
+    this.setState({ ...this.state, ...state });
+  }
+
+  addSearchRecord(keyword) {
+    const { searchRecords } = this.state;
+
+    searchRecords.push(keyword);
+    searchRecords.length > 5 && searchRecords.shift();
+    this.setState({ ...this.state, searchRecords });
+  }
+
   setState(nextState) {
     super.setState(nextState);
 
-    const { loading, error, cats, isDarkmode } = nextState;
+    const { loading, error, cats, keyword, isDarkmode, } = nextState;
 
-    this.searchResult.setState({ loading, error, cats });
+    this.searchResult.setState({ loading, error, cats, keyword });
     this.darkmodeCheckbox.setState({ isDarkmode });
   }
 }

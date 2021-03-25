@@ -45,10 +45,19 @@ margin: 0 0 1em;
 width: 100%;
 }
 
+.SearchSection {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
 .SearchInput {
-width: 100%;
-font-size: 40px;
-padding: 10px 15px;
+	flex-basis: 90%;
+	font-size: 40px;
+}
+
+.RandomFetchBtn {
+	flex-basis: 10%;
 }
 
 .ImageInfo {
