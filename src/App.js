@@ -1,5 +1,5 @@
 import Component from "./lib/Component.js";
-import { DetailModal, SearchResult, DarkmodeCheckbox, SearchSection } from "./component/index.js";
+import { DetailModal, SearchResult, DarkmodeCheckbox, SearchSection, RecentSearchRecord } from "./component/index.js";
 import { isWindowDarkmode, addColorSchemeListener } from "./utils/darkmode.js";
 
 export default class App extends Component {
@@ -25,6 +25,13 @@ export default class App extends Component {
     this.searchSection = new SearchSection({
       $container,
       onUpdateResult: this.onUpdateResult.bind(this),
+      addSearchRecord: this.addSearchRecord.bind(this),
+    });
+
+    this.searchRecords = new RecentSearchRecord({
+      $container,
+      onUpdateResult: this.onUpdateResult.bind(this),
+      changeInputValue: this.searchSection.changeInputValue.bind(this.searchSection),
     });
 
     this.searchResult = new SearchResult({
@@ -68,19 +75,20 @@ export default class App extends Component {
   }
 
   addSearchRecord(keyword) {
-    const { searchRecords } = this.state;
+    const searchRecords = [ ...this.state.searchRecords ];
 
-    searchRecords.push(keyword);
-    searchRecords.length > 5 && searchRecords.shift();
+    searchRecords.unshift(keyword);
+    searchRecords.length > 5 && searchRecords.pop();
     this.setState({ ...this.state, searchRecords });
   }
 
   setState(nextState) {
     super.setState(nextState);
 
-    const { loading, error, cats, keyword, isDarkmode, } = nextState;
+    const { loading, error, cats, keyword, isDarkmode, searchRecords } = nextState;
 
     this.searchResult.setState({ loading, error, cats, keyword });
     this.darkmodeCheckbox.setState({ isDarkmode });
+    this.searchRecords.setState(searchRecords);
   }
 }

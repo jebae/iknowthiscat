@@ -14,7 +14,7 @@ const fetchCats = async (keyword) => {
   try {
     const breeds = await request(`${API_ENDPOINT}/breeds/search?q=${keyword}`);
     const images = breeds.map(async breed => {
-      return await request(`${API_ENDPOINT}/images/search?limit=20&breed_ids=${breed.id}`);
+      return await request(`${API_ENDPOINT}/images/search?limit=1&breed_ids=${breed.id}`);
     });
 
     return (await Promise.all(images)).reduce((acc, cur) => acc.concat(cur), []);

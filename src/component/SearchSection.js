@@ -5,7 +5,7 @@ import RandomFetchBtn from "./RandomFetchBtn.js";
 export default class SearchSection extends Component {
 	section;
 
-	constructor({ $container, onUpdateResult }) {
+	constructor({ $container, onUpdateResult, addSearchRecord }) {
 		super();
 
 		this.section = document.createElement("section");
@@ -14,6 +14,7 @@ export default class SearchSection extends Component {
 		this.searchInput = new SearchInput({
 			$container: this.section,
 			onUpdateResult,
+			addSearchRecord,
 		});
 
 		this.randomFetchBtn = new RandomFetchBtn({
@@ -22,5 +23,9 @@ export default class SearchSection extends Component {
 		});
 
 		$container.appendChild(this.section);
+	}
+
+	changeInputValue(text) {
+		this.searchInput.changeValue(text);
 	}
 }

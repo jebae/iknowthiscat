@@ -33,25 +33,25 @@ export default class SearchResult extends Component {
 		const { error, keyword, cats, loading } = this.state;
 
 		if (error) {
-			this.$searchResult.innerHTML = "something went wrong...";
+			this.$searchResult.innerHTML = "<h2>something went wrong...</h2>";
 		} else if (loading) {
-			this.$searchResult.innerHTML = "Hold on...";
+			this.$searchResult.innerHTML = "<h2>Hold on...</h2>";
 		} else if (keyword != "" && cats.length === 0) {
-			this.$searchResult.innerHTML = "no results..."
+			this.$searchResult.innerHTML = `<h2>no results for ${keyword}...</h2>`;
 		} else {
 			this.$searchResult.innerHTML = cats
-			.map(({ url, name }, i) => `
-				<div class="item">
-					<img
-						class="item-Image"
-						loading="lazy"
-						src=${url}
-						alt=${name}
-						data-idx=${i}
-					/>
-				</div>
-			`)
-			.join("");
+				.map(({ url, name }, i) => `
+					<article class="item">
+						<img
+							class="item-Image"
+							loading="lazy"
+							src=${url}
+							alt=${name}
+							data-idx=${i}
+						/>
+					</article>
+				`)
+				.join("");
 		}
 	}
 }

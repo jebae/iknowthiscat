@@ -6,7 +6,7 @@ export default class SearchInput extends Component {
   reqId = 0;
   tid = null;
 
-  constructor({ $container, onUpdateResult }) {
+  constructor({ $container, onUpdateResult, addSearchRecord }) {
     super();
     this.$searchInput = document.createElement("input");
     this.$searchInput.type = "text";
@@ -16,7 +16,7 @@ export default class SearchInput extends Component {
 
     $container.appendChild(this.$searchInput);
 
-    const onSearch = this.onSearch(onUpdateResult);
+    const onSearch = this.onSearch(onUpdateResult, addSearchRecord);
 
     this.$searchInput.addEventListener("keyup", e => {
       const keyword = e.target.value;
@@ -36,7 +36,7 @@ export default class SearchInput extends Component {
     });
   }
 
-  onSearch(cb) {
+  onSearch(cb, addSearchRecord) {
     return async (keyword) => {
       this.reqId = (this.reqId + 1) % 1000000000;
 
@@ -49,6 +49,7 @@ export default class SearchInput extends Component {
 
       try {
         cb({ error: false, loading: true, keyword });
+        addSearchRecord(keyword);
 
         const cats = await fetchCats(keyword);
 
@@ -59,6 +60,10 @@ export default class SearchInput extends Component {
         cb({ error: true, loading: false });
       }
     }
+  }
+
+  changeValue(text) {
+    this.$searchInput.value = text;
   }
 
   render() {}

@@ -98,7 +98,23 @@ padding: 5px;
 }
 
 .ImageInfo .content-wrapper img {
-width: 100%;
+	width: 100%;
+}
+
+.RecentSearchRecord {
+	display: flex;
+	flex-direction: row;
+	justify-content: left;
+}
+
+.RecentSearchRecord > li {
+	list-style: none;
+	flex-basis: 100px;
+	color: purple;
+}
+
+.RecentSearchRecord > li:hover {
+	cursor: pointer;
 }
 
 @media (max-width: 992px) {
