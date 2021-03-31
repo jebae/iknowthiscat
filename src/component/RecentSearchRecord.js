@@ -33,7 +33,7 @@ export default class RecentSearchRecord extends Component {
 	onClick(cb) {
 		return async (keyword) => {
 			try {
-				cb({ error: false, loading: true, keyword });
+				cb({ error: false, loading: true, keyword, lastIdx: 0 });
 				const cats = await fetchCats(keyword);
 
 				cb({ cats, error: false, loading: false });

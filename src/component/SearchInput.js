@@ -27,6 +27,7 @@ export default class SearchInput extends Component {
 
       this.tid = setTimeout(() => {
         onSearch(keyword);
+        this.tid = null;
       }, 500);
     });
 
@@ -48,14 +49,13 @@ export default class SearchInput extends Component {
       const id = this.reqId;
 
       try {
-        cb({ error: false, loading: true, keyword });
+        cb({ error: false, loading: true, keyword, lastIdx: 0 });
         addSearchRecord(keyword);
 
         const cats = await fetchCats(keyword);
 
-        if (this.reqId === id) {
+        if (this.reqId === id)
           cb({ cats, error: false, loading: false });
-        }
       } catch (err) {
         cb({ error: true, loading: false });
       }

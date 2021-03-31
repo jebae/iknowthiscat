@@ -9,6 +9,7 @@ export default class App extends Component {
     error: false,
     cats: [],
     keyword: "",
+    lastIdx: 0,
     isDarkmode: false,
     searchRecords: [],
   };
@@ -37,6 +38,7 @@ export default class App extends Component {
     this.searchResult = new SearchResult({
       $container,
       onClick: this.openDetailModal.bind(this),
+      onUpdateResult: this.onUpdateResult.bind(this),
     });
 
 
@@ -85,9 +87,9 @@ export default class App extends Component {
   setState(nextState) {
     super.setState(nextState);
 
-    const { loading, error, cats, keyword, isDarkmode, searchRecords } = nextState;
+    const { loading, error, cats, keyword, isDarkmode, searchRecords, lastIdx } = nextState;
 
-    this.searchResult.setState({ loading, error, cats, keyword });
+    this.searchResult.setState({ loading, error, cats, keyword, lastIdx });
     this.darkmodeCheckbox.setState({ isDarkmode });
     this.searchRecords.setState(searchRecords);
   }

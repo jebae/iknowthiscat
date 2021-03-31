@@ -20,7 +20,7 @@ export default class RandomFetchBtn extends Component {
 	onClick(cb) {
 		return async () => {
 			try {
-				cb({ error: false, loading: true });
+				cb({ error: false, loading: true, lastIdx: 0 });
 				const cats = await fetchRandomCats();
 
 				cb({ cats, error: false, loading: false });
