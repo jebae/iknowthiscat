@@ -1,5 +1,5 @@
 import Component from "./lib/Component.js";
-import { DetailModal, SearchResult, DarkmodeCheckbox, SearchSection, RecentSearchRecord } from "./component/index.js";
+import { DetailModal, SearchResult, DarkmodeCheckbox, SearchSection, RecentSearchRecord, Banner } from "./component/index.js";
 import { isWindowDarkmode, addColorSchemeListener } from "./utils/darkmode.js";
 
 export default class App extends Component {
@@ -23,6 +23,8 @@ export default class App extends Component {
       setDarkmode: this.setDarkmode.bind(this),
     });
 
+    this.banner = new Banner({ $container });
+
     this.searchSection = new SearchSection({
       $container,
       onUpdateResult: this.onUpdateResult.bind(this),
@@ -40,7 +42,6 @@ export default class App extends Component {
       onClick: this.openDetailModal.bind(this),
       onUpdateResult: this.onUpdateResult.bind(this),
     });
-
 
     this.detailModal = new DetailModal({
       $container,

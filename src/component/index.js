@@ -5,6 +5,7 @@ import SearchInput from "./SearchInput.js";
 import RandomFetchBtn from "./RandomFetchBtn.js";
 import SearchSection from "./SearchSection.js";
 import RecentSearchRecord from "./RecentSearchRecord.js";
+import Banner from "./Banner.js";
 
 export {
 	DetailModal,
@@ -14,4 +15,5 @@ export {
 	RandomFetchBtn,
 	SearchSection,
 	RecentSearchRecord,
+	Banner,
 };
